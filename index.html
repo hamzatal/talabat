@@ -362,7 +362,7 @@ const iso=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
 let TODAY=iso(new Date());
 let S=load(),cur=TODAY,tab='day',editId=null,confirmCb=null;
 
-function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&Array.isArray(d.orders)){d.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=false;if(o.price!=null)o.purchased=true;if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});return d}}catch(e){}return{orders:[]}}
+function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&Array.isArray(d.orders)){d.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=(o.price!=null);if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});return d}}catch(e){}return{orders:[]}}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('تعذّر الحفظ','alert')}}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>{if(v==null||v==='')return null;v=String(v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(',','.');v=parseFloat(v);return isNaN(v)?null:v};
@@ -441,16 +441,16 @@ function dayView(){
 
 function card(o){
   const d=diff(o);
-  const cls=o.settled?'settled':d===null?(o.purchased?'purch':'wait'):'priced';
-  let body;
+  const cls=o.settled?'settled':o.price!=null?'priced':(o.purchased?'purch':'wait');
+  let body='';
+  if(!o.purchased)body+=`<button class="btn-purch-full" data-act="purchase" data-id="${o.id}">${ICONS('cart')} تم الشراء</button>`;
   if(d===null){
-    if(o.purchased){body=`<div class="status-row"><span class="tag purch">${ICONS('cart')} تم الشراء</span><div class="price-inline"><input type="text" inputmode="decimal" autocomplete="off" placeholder="السعر" data-price="${o.id}" aria-label="السعر"><button class="mini solid" data-act="setPrice" data-id="${o.id}">${ICONS('check')} سجّل</button></div></div>`}
-    else{body=`<button class="btn-purch-full" data-act="purchase" data-id="${o.id}">${ICONS('cart')} تم الشراء</button>`}
+    if(o.purchased)body+=`<div class="status-row"><span class="tag purch">${ICONS('cart')} تم الشراء</span><div class="price-inline"><input type="text" inputmode="decimal" autocomplete="off" placeholder="السعر" data-price="${o.id}" aria-label="السعر"><button class="mini solid" data-act="setPrice" data-id="${o.id}">${ICONS('check')} سجّل</button></div></div>`;
   }else{
     const btn=o.settled?`<button class="mini ghost" data-act="unsettle" data-id="${o.id}">${ICONS('undo')} تراجع</button>`:`<button class="mini ok" data-act="settle" data-id="${o.id}">${ICONS('check')}${d>0?' سلّم الباقي':' استلم الباقي'}</button>`;
-    body=`<div class="status-row"><span>السعر: <b class="mono" style="font-size:.78rem">${money(o.price)}</b></span>${tagFor(d,o.settled)} ${btn}</div>`;
+    body+=`<div class="status-row" style="${o.purchased?'':'margin-top:8px'}"><span>السعر: <b class="mono" style="font-size:.78rem">${money(o.price)}</b></span>${tagFor(d,o.settled)} ${btn}</div>`;
   }
-  return `<article class="card ${cls}"><div class="card-top"><div class="card-name">${esc(o.name)}${o.qty>1?` <span class="qty">×${o.qty}</span>`:''}</div><span class="paid-badge">دفع ${money(o.paid)}</span></div><div class="card-text">${esc(o.text)}</div>${body}<div class="card-foot"><span class="foot-time">${ICONS('clock')}${fmtTime(o.ts)}</span><div class="foot-actions">${o.purchased&&d===null?`<button class="link-btn" data-act="unpurch" data-id="${o.id}">${ICONS('undo')} إلغاء الشراء</button>`:''}<button class="link-btn" data-act="edit" data-id="${o.id}">${ICONS('pencil')} تعديل</button><button class="link-btn danger" data-act="del" data-id="${o.id}">${ICONS('trash')} حذف</button></div></div></article>`;
+  return `<article class="card ${cls}"><div class="card-top"><div class="card-name">${esc(o.name)}${o.qty>1?` <span class="qty">×${o.qty}</span>`:''}</div><span class="paid-badge">دفع ${money(o.paid)}</span></div><div class="card-text">${esc(o.text)}</div>${body}<div class="card-foot"><span class="foot-time">${ICONS('clock')}${fmtTime(o.ts)}</span><div class="foot-actions">${o.purchased?`<button class="link-btn" data-act="unpurch" data-id="${o.id}">${ICONS('undo')} إلغاء الشراء</button>`:''}<button class="link-btn" data-act="edit" data-id="${o.id}">${ICONS('pencil')} تعديل</button><button class="link-btn danger" data-act="del" data-id="${o.id}">${ICONS('trash')} حذف</button></div></div></article>`;
 }
 
 function shopView(){
@@ -502,7 +502,7 @@ function logView(){
   h+=`<div class="sec-title">${ICON('settings')} الإعدادات</div>`;
   h+=`<button class="set-row" data-act="refresh"><div class="set-l"><div class="set-ic">${ICON('refresh')}</div><div><b>تحديث التطبيق</b><small>لو في ميزة ما ظهرت عندك اضغط هون (بياناتك ما بتنحذف)</small></div></div></button>`;
   h+=`<button class="set-row danger" data-act="clearAll"><div class="set-l"><div class="set-ic danger">${ICON('trash')}</div><div><b>مسح كل البيانات</b><small>حذف كل الطلبات من كل الأيام نهائياً</small></div></div></button>`;
-  h+=`<div class="set-row info"><div class="set-l"><div class="set-ic">${ICON('bag')}</div><div><b>طلبات الموظفين</b><small>إصدار 1.2 · يعمل أوفلاين</small></div></div><div class="hist-r" style="font-size:.7rem;color:var(--muted)">محفوظ محلياً</div></div>`;
+  h+=`<div class="set-row info"><div class="set-l"><div class="set-ic">${ICON('bag')}</div><div><b>طلبات الموظفين</b><small>إصدار 1.3 · يعمل أوفلاين</small></div></div><div class="hist-r" style="font-size:.7rem;color:var(--muted)">محفوظ محلياً</div></div>`;
   return h+'</div>';
 }
 
@@ -517,7 +517,7 @@ function openForm(id){
 }
 function closeForm(){$('#ov').classList.remove('open')}
 function saveForm(){
-  const name=$('#fName').value.trim(),text=$('#fText').value.trim(),qty=Math.max(1,Math.round(num($('#fQty').value)||1)),paid=num($('#fPaid').value),price=num($('#fPrice').value),purchased=$('#fPurch').checked||num($('#fPrice').value)!=null;
+  const name=$('#fName').value.trim(),text=$('#fText').value.trim(),qty=Math.max(1,Math.round(num($('#fQty').value)||1)),paid=num($('#fPaid').value),price=num($('#fPrice').value),purchased=$('#fPurch').checked;
   if(!name)return toast('اكتب اسم الموظف','alert');if(!text)return toast('اكتب الطلب','alert');if(paid===null||paid<0)return toast('اكتب المبلغ المدفوع','alert');
   if(editId){const o=S.orders.find(x=>x.id===editId);Object.assign(o,{name,text,qty,paid,price,purchased,settled:price==null?false:o.settled})}
   else{S.orders.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),ts:Date.now(),date:cur,name,text,qty,paid,price,purchased,settled:false})}
@@ -543,7 +543,7 @@ document.addEventListener('click',e=>{
     case 'purchase':if(o){o.purchased=true;save();render();toast('تم تسجيل الشراء','cart')}break;
     case 'purAll':{const p=S.orders.filter(x=>x.date===cur&&!x.purchased);if(!p.length)return toast('كل الطلبات مشتراة','check');confirmAction('شراء الكل',`تسجيل ${p.length} طلب كمشترى؟`,()=>{p.forEach(x=>x.purchased=true);save();render();toast('تم تسجيل الكل','cart')});break}
     case 'doneEmp':{const n=t.dataset.name;const p=S.orders.filter(x=>x.date===cur&&x.name.trim()===n&&!x.purchased);if(!p.length)return toast('ما في طلبات منتظرة','info');confirmAction(`خلصت من ${n}`,`تسجيل ${p.length} طلب لـ ${n} كمشترى؟`,()=>{p.forEach(x=>x.purchased=true);save();render();toast(`خلصت من ${n}`,'check')});break}
-    case 'setPrice':{const inp=document.querySelector(`[data-price="${id}"]`);const v=num(inp&&inp.value);if(v===null||v<0)return toast('اكتب السعر','alert');o.price=v;o.purchased=true;o.settled=false;save();render();toast('تم تسجيل السعر');break}
+    case 'setPrice':{const inp=document.querySelector(`[data-price="${id}"]`);const v=num(inp&&inp.value);if(v===null||v<0)return toast('اكتب السعر','alert');o.price=v;o.settled=false;save();render();toast('تم تسجيل السعر');break}
     case 'settle':if(o){o.settled=true;save();render();toast('تمت التسوية')}break;
     case 'unsettle':if(o){o.settled=false;save();render()}break;
     case 'unpurch':if(o){o.purchased=false;save();render();toast('تم إلغاء الشراء','undo')}break;
@@ -564,7 +564,7 @@ document.addEventListener('keydown',e=>{
 
 document.addEventListener('change',e=>{
   if(e.target.id!=='file')return;const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||!Array.isArray(d.orders))throw 0;confirmAction('استعادة النسخة','استبدال البيانات الحالية؟',()=>{S={orders:d.orders};S.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=false;if(o.price!=null)o.purchased=true;if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});save();render();toast('تمت الاستعادة','upload')})}catch(x){toast('الملف غير صالح','alert')}};
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||!Array.isArray(d.orders))throw 0;confirmAction('استعادة النسخة','استبدال البيانات الحالية؟',()=>{S={orders:d.orders};S.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=(o.price!=null);if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});save();render();toast('تمت الاستعادة','upload')})}catch(x){toast('الملف غير صالح','alert')}};
   r.readAsText(f);e.target.value='';
 });
 
