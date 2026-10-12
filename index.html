@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>طلبات الموظفين</title>
 <meta name="theme-color" content="#14304f">
+<link id="mf" rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -255,7 +256,8 @@ textarea{resize:vertical;min-height:50px}
 <svg width="0" height="0" style="position:absolute;width:0;height:0;overflow:hidden" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
   <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></symbol>
   <symbol id="i-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></symbol>
-  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M16 16h6M2 16h6M12 4v16M5 8h14M5 8 2 16h6L5 8zM19 8l-3 8h6l-3-8z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
   <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5M3 12h8"/><path d="M12 7v5l4 2"/></symbol>
   <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
@@ -293,7 +295,7 @@ textarea{resize:vertical;min-height:50px}
 
 <nav id="tabbar">
   <button class="tab on" data-tab="day"><span class="ti"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="#i-calendar"/></svg></span><span class="tl">اليوم</span></button>
-  <button class="tab" data-tab="bal"><span class="ti"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="#i-scale"/></svg></span><span class="tl">الأرصدة</span></button>
+  <button class="tab" data-tab="bal"><span class="ti"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="#i-wallet"/></svg></span><span class="tl">الأرصدة</span></button>
   <button class="tab tab-fab" data-tab="add"><span class="fab"><svg class="ic" width="24" height="24" aria-hidden="true"><use href="#i-plus"/></svg></span><span class="tl">طلب</span></button>
   <button class="tab" data-tab="shop"><span class="ti"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="#i-cart"/></svg></span><span class="tl">الشراء</span></button>
   <button class="tab" data-tab="log"><span class="ti"><svg class="ic" width="20" height="20" aria-hidden="true"><use href="#i-settings"/></svg></span><span class="tl">الإعدادات</span></button>
@@ -311,12 +313,12 @@ textarea{resize:vertical;min-height:50px}
     <label for="fText">الطلب</label>
     <textarea id="fText" rows="2" placeholder="مثال: ساندويشة فلافل + بيبسي"></textarea>
     <div class="row-2">
-      <div><label for="fQty">الكمية</label><input id="fQty" type="number" inputmode="numeric" min="1" step="1" value="1"></div>
-      <div><label for="fPaid">المدفوع <span class="hint">(د.أ)</span></label><input id="fPaid" type="number" inputmode="decimal" step="0.05" min="0" placeholder="0"></div>
+      <div><label for="fQty">الكمية</label><input id="fQty" type="text" inputmode="numeric" autocomplete="off" value="1"></div>
+      <div><label for="fPaid">المدفوع <span class="hint">(د.أ)</span></label><input id="fPaid" type="text" inputmode="decimal" autocomplete="off" placeholder="0"></div>
     </div>
     <div class="chips" id="chips"></div>
     <label for="fPrice">السعر الفعلي <span class="hint">(بعد الشراء)</span></label>
-    <input id="fPrice" type="number" inputmode="decimal" step="0.05" min="0" placeholder="يتعبّى بعد الشراء">
+    <input id="fPrice" type="text" inputmode="decimal" autocomplete="off" placeholder="يتعبّى بعد الشراء">
     <div class="check-row"><input type="checkbox" id="fPurch"><label for="fPurch">تم شراء هذا الطلب<small>علّمه لو جبت الطلب فعلاً من المطعم</small></label></div>
     <div style="display:flex;gap:8px;margin-top:14px;margin-bottom:6px">
       <button class="btn" data-act="saveForm" style="flex:1"><svg class="ic" width="16" height="16"><use href="#i-check"/></svg> حفظ</button>
@@ -360,7 +362,7 @@ const iso=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
 let TODAY=iso(new Date());
 let S=load(),cur=TODAY,tab='day',editId=null,confirmCb=null;
 
-function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&Array.isArray(d.orders)){d.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=(o.price!=null);if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});return d}}catch(e){}return{orders:[]}}
+function load(){try{const d=JSON.parse(localStorage.getItem(K));if(d&&Array.isArray(d.orders)){d.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=false;if(o.price!=null)o.purchased=true;if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});return d}}catch(e){}return{orders:[]}}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('تعذّر الحفظ','alert')}}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>{if(v==null||v==='')return null;v=String(v).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(',','.');v=parseFloat(v);return isNaN(v)?null:v};
@@ -396,9 +398,14 @@ async function installApp(){
   if(isIOS()){
     h+='<ol><li>افتح الصفحة بمتصفح <b>Safari</b>.</li><li>اضغط زر المشاركة <b>(⬆︎)</b> بأسفل الشاشة.</li><li>اختار <b>«إضافة إلى الشاشة الرئيسية»</b>.</li><li>اضغط <b>«إضافة»</b>.</li></ol>';
   }else{
-    h+='<ol><li>اضغط قائمة المتصفح <b>(⋮)</b> أو <b>(☰)</b>.</li><li>اختار <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.</li><li>أكّد بالضغط على <b>«تثبيت»</b>.</li></ol><div style="color:var(--muted);font-size:.74rem">لو الخيار مش ظاهر: تأكد إنك فاتح الموقع من رابط https وبمتصفح عادي (مش وضع التصفح الخفي).</div>';
+    h+='<ol><li>اضغط قائمة المتصفح <b>(⋮)</b> أو <b>(☰)</b>.</li><li>اختار <b>«تثبيت التطبيق»</b> أو <b>«إضافة إلى الشاشة الرئيسية»</b>.</li><li>أكّد بالضغط على <b>«تثبيت»</b>.</li></ol><div style="color:var(--muted);font-size:.74rem;line-height:1.7">• لو المتصفح بيحكي «مثبّت» أو بيعرض «فتح التطبيق» رغم إنك حذفته: احذفه من <b>إعدادات الجوال ← التطبيقات ← طلبات ← إلغاء التثبيت</b> (مش بس من الشاشة الرئيسية)، أو امسح بيانات الموقع من إعدادات المتصفح، وبعدين جرّب.<br>• لازم الرابط يكون https وبدون وضع التصفح الخفي.</div>';
   }
   showInfo('إضافة للشاشة الرئيسية',h);
+}
+
+async function refreshApp(){
+  try{if('serviceWorker'in navigator){const rs=await navigator.serviceWorker.getRegistrations();await Promise.all(rs.map(r=>r.unregister()))}if(window.caches){const ks=await caches.keys();await Promise.all(ks.map(k=>caches.delete(k)))}}catch(e){}
+  location.reload();
 }
 
 function tagFor(d,settled){if(settled)return`<span class="tag done">${ICONS('check')} تمت التسوية</span>`;if(d===0)return`<span class="tag zero">حسابه صفر</span>`;return d>0?`<span class="tag pos">باقي له ${money(d)}</span>`:`<span class="tag neg">عليه ${money(d)}</span>`}
@@ -437,13 +444,13 @@ function card(o){
   const cls=o.settled?'settled':d===null?(o.purchased?'purch':'wait'):'priced';
   let body;
   if(d===null){
-    if(o.purchased){body=`<div class="status-row"><span class="tag purch">${ICONS('cart')} تم الشراء</span><div class="price-inline"><input type="number" inputmode="decimal" step="0.05" min="0" placeholder="السعر" data-price="${o.id}" aria-label="السعر"><button class="mini solid" data-act="setPrice" data-id="${o.id}">${ICONS('check')} سجّل</button></div></div>`}
+    if(o.purchased){body=`<div class="status-row"><span class="tag purch">${ICONS('cart')} تم الشراء</span><div class="price-inline"><input type="text" inputmode="decimal" autocomplete="off" placeholder="السعر" data-price="${o.id}" aria-label="السعر"><button class="mini solid" data-act="setPrice" data-id="${o.id}">${ICONS('check')} سجّل</button></div></div>`}
     else{body=`<button class="btn-purch-full" data-act="purchase" data-id="${o.id}">${ICONS('cart')} تم الشراء</button>`}
   }else{
     const btn=o.settled?`<button class="mini ghost" data-act="unsettle" data-id="${o.id}">${ICONS('undo')} تراجع</button>`:`<button class="mini ok" data-act="settle" data-id="${o.id}">${ICONS('check')}${d>0?' سلّم الباقي':' استلم الباقي'}</button>`;
     body=`<div class="status-row"><span>السعر: <b class="mono" style="font-size:.78rem">${money(o.price)}</b></span>${tagFor(d,o.settled)} ${btn}</div>`;
   }
-  return `<article class="card ${cls}"><div class="card-top"><div class="card-name">${esc(o.name)}${o.qty>1?` <span class="qty">×${o.qty}</span>`:''}</div><span class="paid-badge">دفع ${money(o.paid)}</span></div><div class="card-text">${esc(o.text)}</div>${body}<div class="card-foot"><span class="foot-time">${ICONS('clock')}${fmtTime(o.ts)}</span><div class="foot-actions"><button class="link-btn" data-act="edit" data-id="${o.id}">${ICONS('pencil')} تعديل</button><button class="link-btn danger" data-act="del" data-id="${o.id}">${ICONS('trash')} حذف</button></div></div></article>`;
+  return `<article class="card ${cls}"><div class="card-top"><div class="card-name">${esc(o.name)}${o.qty>1?` <span class="qty">×${o.qty}</span>`:''}</div><span class="paid-badge">دفع ${money(o.paid)}</span></div><div class="card-text">${esc(o.text)}</div>${body}<div class="card-foot"><span class="foot-time">${ICONS('clock')}${fmtTime(o.ts)}</span><div class="foot-actions">${o.purchased&&d===null?`<button class="link-btn" data-act="unpurch" data-id="${o.id}">${ICONS('undo')} إلغاء الشراء</button>`:''}<button class="link-btn" data-act="edit" data-id="${o.id}">${ICONS('pencil')} تعديل</button><button class="link-btn danger" data-act="del" data-id="${o.id}">${ICONS('trash')} حذف</button></div></div></article>`;
 }
 
 function shopView(){
@@ -466,7 +473,7 @@ function balances(){const m={};S.orders.forEach(o=>{const d=diff(o);if(d===null|
 function balView(){
   const B=balances();
   let h=`<div class="wrap"><div class="note">${ICON('info')} الأرصدة غير المسوّاة من كل الأيام. الموجب = باقي للموظف، السالب = عليه.</div>`;
-  if(!B.length)return h+`<div class="empty"><div class="empty-ic">${ICON('scale')}</div><b>كل الحسابات مسوّاة</b><p>ما في أرصدة معلّقة بأي موظف.</p></div></div>`;
+  if(!B.length)return h+`<div class="empty"><div class="empty-ic">${ICON('wallet')}</div><b>كل الحسابات مسوّاة</b><p>ما في أرصدة معلّقة بأي موظف.</p></div></div>`;
   const tot=B.reduce((a,x)=>a+x.sum,0);
   h+=`<div class="stats"><div class="stat big" style="grid-column:1/-1"><small>صافي الأرصدة المعلّقة</small><b>${tot<0?'-':''}${money(tot)}</b></div></div>`;
   h+=B.map(x=>`<div class="bal-card"><div class="bal-info"><b>${esc(x.n)}</b><small>${x.c===1?'طلب واحد':x.c===2?'طلبان':x.c+' طلبات'} غير مسوّاة</small></div><div class="bal-r">${tagFor(x.sum,false)}<button class="mini solid" data-act="settleAll" data-name="${esc(x.n)}">${ICONS('check')} تسوية الكل</button></div></div>`).join('');
@@ -493,8 +500,9 @@ function logView(){
   h+=`<div style="display:flex;gap:8px"><button class="btn" data-act="export" style="flex:1">${ICON('download')} تنزيل</button><button class="btn ghost" data-act="import" style="flex:1">${ICON('upload')} استعادة</button></div>`;
   h+=`<input type="file" id="file" accept="application/json,.json" hidden>`;
   h+=`<div class="sec-title">${ICON('settings')} الإعدادات</div>`;
+  h+=`<button class="set-row" data-act="refresh"><div class="set-l"><div class="set-ic">${ICON('refresh')}</div><div><b>تحديث التطبيق</b><small>لو في ميزة ما ظهرت عندك اضغط هون (بياناتك ما بتنحذف)</small></div></div></button>`;
   h+=`<button class="set-row danger" data-act="clearAll"><div class="set-l"><div class="set-ic danger">${ICON('trash')}</div><div><b>مسح كل البيانات</b><small>حذف كل الطلبات من كل الأيام نهائياً</small></div></div></button>`;
-  h+=`<div class="set-row info"><div class="set-l"><div class="set-ic">${ICON('bag')}</div><div><b>طلبات الموظفين</b><small>إصدار 1.1 · يعمل أوفلاين</small></div></div><div class="hist-r" style="font-size:.7rem;color:var(--muted)">محفوظ محلياً</div></div>`;
+  h+=`<div class="set-row info"><div class="set-l"><div class="set-ic">${ICON('bag')}</div><div><b>طلبات الموظفين</b><small>إصدار 1.2 · يعمل أوفلاين</small></div></div><div class="hist-r" style="font-size:.7rem;color:var(--muted)">محفوظ محلياً</div></div>`;
   return h+'</div>';
 }
 
@@ -509,7 +517,7 @@ function openForm(id){
 }
 function closeForm(){$('#ov').classList.remove('open')}
 function saveForm(){
-  const name=$('#fName').value.trim(),text=$('#fText').value.trim(),qty=Math.max(1,parseInt($('#fQty').value)||1),paid=num($('#fPaid').value),price=num($('#fPrice').value),purchased=$('#fPurch').checked;
+  const name=$('#fName').value.trim(),text=$('#fText').value.trim(),qty=Math.max(1,Math.round(num($('#fQty').value)||1)),paid=num($('#fPaid').value),price=num($('#fPrice').value),purchased=$('#fPurch').checked||num($('#fPrice').value)!=null;
   if(!name)return toast('اكتب اسم الموظف','alert');if(!text)return toast('اكتب الطلب','alert');if(paid===null||paid<0)return toast('اكتب المبلغ المدفوع','alert');
   if(editId){const o=S.orders.find(x=>x.id===editId);Object.assign(o,{name,text,qty,paid,price,purchased,settled:price==null?false:o.settled})}
   else{S.orders.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,5),ts:Date.now(),date:cur,name,text,qty,paid,price,purchased,settled:false})}
@@ -535,9 +543,11 @@ document.addEventListener('click',e=>{
     case 'purchase':if(o){o.purchased=true;save();render();toast('تم تسجيل الشراء','cart')}break;
     case 'purAll':{const p=S.orders.filter(x=>x.date===cur&&!x.purchased);if(!p.length)return toast('كل الطلبات مشتراة','check');confirmAction('شراء الكل',`تسجيل ${p.length} طلب كمشترى؟`,()=>{p.forEach(x=>x.purchased=true);save();render();toast('تم تسجيل الكل','cart')});break}
     case 'doneEmp':{const n=t.dataset.name;const p=S.orders.filter(x=>x.date===cur&&x.name.trim()===n&&!x.purchased);if(!p.length)return toast('ما في طلبات منتظرة','info');confirmAction(`خلصت من ${n}`,`تسجيل ${p.length} طلب لـ ${n} كمشترى؟`,()=>{p.forEach(x=>x.purchased=true);save();render();toast(`خلصت من ${n}`,'check')});break}
-    case 'setPrice':{const inp=document.querySelector(`[data-price="${id}"]`);const v=num(inp&&inp.value);if(v===null||v<0)return toast('اكتب السعر','alert');o.price=v;o.settled=false;save();render();toast('تم تسجيل السعر');break}
+    case 'setPrice':{const inp=document.querySelector(`[data-price="${id}"]`);const v=num(inp&&inp.value);if(v===null||v<0)return toast('اكتب السعر','alert');o.price=v;o.purchased=true;o.settled=false;save();render();toast('تم تسجيل السعر');break}
     case 'settle':if(o){o.settled=true;save();render();toast('تمت التسوية')}break;
     case 'unsettle':if(o){o.settled=false;save();render()}break;
+    case 'unpurch':if(o){o.purchased=false;save();render();toast('تم إلغاء الشراء','undo')}break;
+    case 'refresh':refreshApp();break;
     case 'del':if(o)confirmAction('حذف الطلب',`حذف طلب ${o.name}؟`,()=>{S.orders=S.orders.filter(x=>x.id!==id);save();render();toast('تم الحذف','trash')});break;
     case 'settleAll':{const n=t.dataset.name;confirmAction(`تسوية ${n}`,`تسوية كل أرصدة ${n}؟`,()=>{S.orders.forEach(x=>{if(x.name.trim()===n&&x.price!=null)x.settled=true});save();render();toast(`تمت تسوية ${n}`)});break}
     case 'openDay':cur=t.dataset.date;tab='day';render();window.scrollTo(0,0);break;
@@ -554,7 +564,7 @@ document.addEventListener('keydown',e=>{
 
 document.addEventListener('change',e=>{
   if(e.target.id!=='file')return;const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||!Array.isArray(d.orders))throw 0;confirmAction('استعادة النسخة','استبدال البيانات الحالية؟',()=>{S={orders:d.orders};S.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=false;if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});save();render();toast('تمت الاستعادة','upload')})}catch(x){toast('الملف غير صالح','alert')}};
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!d||!Array.isArray(d.orders))throw 0;confirmAction('استعادة النسخة','استبدال البيانات الحالية؟',()=>{S={orders:d.orders};S.orders.forEach(o=>{if(o.qty==null)o.qty=1;if(o.purchased==null)o.purchased=false;if(o.price!=null)o.purchased=true;if(o.ts==null)o.ts=Date.now();if(o.settled==null)o.settled=false});save();render();toast('تمت الاستعادة','upload')})}catch(x){toast('الملف غير صالح','alert')}};
   r.readAsText(f);e.target.value='';
 });
 
@@ -592,11 +602,8 @@ function setupPWA(){
   if(i512)icons.push({src:i512,sizes:'512x512',type:'image/png',purpose:'any'});
   if(m512)icons.push({src:m512,sizes:'512x512',type:'image/png',purpose:'maskable'});
   const manifest={id:base,name:'طلبات الموظفين',short_name:'طلبات',description:'نظّم طلبات الغداء اليومية للموظفين',start_url:base,scope:scope,display:'standalone',orientation:'portrait',background_color:'#F3EFE3',theme_color:'#14304f',lang:'ar',dir:'rtl',icons:icons};
-  try{
-    const l=document.createElement('link');l.rel='manifest';
-    l.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));
-    document.head.appendChild(l);
-  }catch(e){}
+  const useBlob=()=>{try{const old=document.getElementById('mf');if(old)old.remove();const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'}));document.head.appendChild(l)}catch(e){}};
+  try{fetch('manifest.json',{cache:'no-store'}).then(r=>{if(!r.ok)useBlob()}).catch(useBlob)}catch(e){useBlob()}
   if('serviceWorker'in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 }
 try{setupPWA()}catch(e){}
